@@ -126,9 +126,11 @@ the `.is-drawn` class (added by the IntersectionObserver in `app.js` when a host
 into view) animates marks from zero and runs number count-ups. All motion respects
 `prefers-reduced-motion`.
 
-Two rules worth knowing before you touch these:
+Rules worth knowing before you touch these:
 - **A gauge ring holds the number only** — its label always sits below, via `.gauge-figure > .gauge-caption`.
 - **`.nodegraph svg` is pinned to `direction: ltr`.** Under `dir=rtl`, SVG `text-anchor: start/end` swap sides and every label lands back on top of its node. Hebrew still shapes correctly via bidi.
+- **The node graph has two layouts, not one.** `app.js` has `buildHorizontalGraph()` (desktop/tablet: platforms left column, data right column, hub centre) and `buildVerticalGraph()` (mobile ≤767px: platforms top row, hub middle, data bottom row) — the vertical one is the horizontal one rotated 90° clockwise, same visual language. `renderNodeGraph()` picks one via `matchMedia('(max-width: 767px)')` and a `change` listener re-renders it live if the viewport crosses the breakpoint. Both share `nodeMotion()` for the flow-pulse animation and `markGroup()`/`lockupGroup()` for the brand mark/logo.
+- **Multi-word node labels wrap, they never shrink to fit.** `wrapLabel()`/`labelTspans()` split a label with a space into two `<tspan>` lines that grow *away* from the node (upward for a row whose labels sit above it, downward for one below) — this is language-agnostic: it fixed real overlaps in English ("Service policy" vs "Customer history") the same way it handles Hebrew two-word labels. If you add a new platform/data-source item with a long label, this handles it automatically; don't add manual line breaks in `content.js`.
 
 **Marketing stats are real and sourced.** The numbers come from the PDFs in
 `Documents/` — `Voca_ROI_Report` (BrightLocal, Harvard, Bain, Womply, ReviewTrackers,

@@ -188,8 +188,19 @@ function lockupGroup(cx, y, height, cls) {
 }
 
 // Platforms ← Voca → business data. The point of the page, drawn.
-function renderNodeGraph(t) {
-  const s = t.solution;
+// Two layouts share the same visual language (mark/lockup, node/link/pulse
+// styling): a wide horizontal fan (desktop/tablet) and a stacked vertical
+// fan (mobile) — the vertical one is the horizontal one rotated 90° CW:
+// what was the left column becomes the top row, the right column the
+// bottom row, and the hub stays in the middle.
+function nodeMotion(kind, i, d) {
+  if (reduceMotion) return '';
+  return `<circle class="ng-pulse ng-pulse--${kind}" r="2.5">
+    <animateMotion dur="3s" begin="${(i * 0.45).toFixed(2)}s" repeatCount="indefinite" path="${d}"></animateMotion>
+  </circle>`;
+}
+
+function buildHorizontalGraph(s) {
   const W = 1000, H = 510;
   const TOP = 74;                     // headroom for the logo lockup
   const HUB = { x: W / 2, y: TOP + (H - TOP) / 2, r: 52 };
@@ -199,9 +210,6 @@ function renderNodeGraph(t) {
     const step = 88, mid = (n - 1) / 2;
     return Array.from({ length: n }, (_, i) => HUB.y + (i - mid) * step);
   };
-
-  const leftYs = ys(s.platforms.length);
-  const rightYs = ys(s.dataSources.length);
 
   const linkPath = (nx, ny, side) => {
     const startX = nx + side * NR;
@@ -216,32 +224,111 @@ function renderNodeGraph(t) {
     const d = linkPath(xs, y, side);
     const labelX = xs - side * (NR + 14);
     const anchor = side === 1 ? 'end' : 'start';
-    const pulse = reduceMotion ? '' : `
-      <circle class="ng-pulse ng-pulse--${kind}" r="2.5">
-        <animateMotion dur="3s" begin="${(i * 0.45).toFixed(2)}s" repeatCount="indefinite" path="${d}"></animateMotion>
-      </circle>`;
     return `
       <path class="ng-link ng-link--${kind}" d="${d}"></path>
-      ${pulse}
+      ${nodeMotion(kind, i, d)}
       <circle class="ng-node ng-node--${kind}" cx="${xs}" cy="${y}" r="${NR}"></circle>
       <text class="ng-icon ng-icon--${kind}" x="${xs}" y="${y}" text-anchor="middle" dominant-baseline="central">${item.icon}</text>
       <text class="ng-label" x="${labelX}" y="${y}" text-anchor="${anchor}" dominant-baseline="central">${item.label}</text>`;
   }).join('');
 
-  document.getElementById('nodeGraph').innerHTML = `
-    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${s.graphPlatformsTitle} → ${s.hubLabel} → ${s.graphDataTitle}">
+  const inner = `
       ${lockupGroup(W / 2, 8, 40, 'ng-lockup')}
       <text class="ng-col-title" x="${LEFT_X}" y="${TOP + 4}" text-anchor="middle">${s.graphPlatformsTitle}</text>
       <text class="ng-col-title" x="${RIGHT_X}" y="${TOP + 4}" text-anchor="middle">${s.graphDataTitle}</text>
 
-      ${nodeGroup(s.platforms, LEFT_X, leftYs, 1, 'platform')}
-      ${nodeGroup(s.dataSources, RIGHT_X, rightYs, -1, 'data')}
+      ${nodeGroup(s.platforms, LEFT_X, ys(s.platforms.length), 1, 'platform')}
+      ${nodeGroup(s.dataSources, RIGHT_X, ys(s.dataSources.length), -1, 'data')}
 
       <circle class="ng-hub-ring" cx="${HUB.x}" cy="${HUB.y}" r="${HUB.r}"></circle>
       <circle class="ng-hub" cx="${HUB.x}" cy="${HUB.y}" r="${HUB.r}"></circle>
-      ${markGroup(HUB.x, HUB.y, 52, 'ng-hub-mark')}
-      <text class="ng-hub-label" x="${HUB.x}" y="${HUB.y + HUB.r + 20}" text-anchor="middle">${s.hubSub}</text>
-    </svg>`;
+      ${markGroup(HUB.x, HUB.y, HUB.r, 'ng-hub-mark')}
+      <text class="ng-hub-label" x="${HUB.x}" y="${HUB.y + HUB.r + 20}" text-anchor="middle">${s.hubSub}</text>`;
+
+  return { W, H, inner };
+}
+
+function buildVerticalGraph(s) {
+  const W = 360;
+  const NR = 15;                      // node radius (smaller — tight width)
+  const n = Math.max(s.platforms.length, s.dataSources.length);
+  const MARGIN = 40;
+  const pitch = n > 1 ? (W - MARGIN * 2) / (n - 1) : 0;
+  const xAt = (i) => MARGIN + i * pitch;
+
+  const LOCKUP_Y = 8, LOCKUP_H = 32;
+  const TITLE1_Y = LOCKUP_Y + LOCKUP_H + 42;   // "where customers speak" (+12 headroom for a wrapped label line)
+  const LABEL1_Y = TITLE1_Y + 30;              // nearest-to-node label line, above row 1 (outward from hub)
+  const ROW1_Y = LABEL1_Y + 24;                // platform node centres
+
+  const HUB = { x: W / 2, y: ROW1_Y + 122, r: 40 };
+
+  const HUB_LABEL_Y = HUB.y + HUB.r + 22;
+  const TITLE2_Y = HUB_LABEL_Y + 30;           // "your business data"
+  const ROW2_Y = TITLE2_Y + 38;                // data-source node centres
+  const LABEL2_Y = ROW2_Y + NR + 16;           // nearest-to-node label line, below row 2 (outward from hub)
+  const H = LABEL2_Y + 20 + 12;                 // padding + room for a wrapped second label line
+
+  const bend = 55;
+  // Converging down: from a top-row node into the hub.
+  const linkDown = (x, y) => {
+    const startY = y + NR, endY = HUB.y - HUB.r;
+    return `M${x},${startY} C${x},${startY + bend} ${HUB.x},${endY - bend} ${HUB.x},${endY}`;
+  };
+  // Diverging down: from the hub into a bottom-row node.
+  const linkFromHub = (x, y) => {
+    const startY = HUB.y + HUB.r, endY = y - NR;
+    return `M${HUB.x},${startY} C${HUB.x},${startY + bend} ${x},${endY - bend} ${x},${endY}`;
+  };
+
+  // Multi-word labels (in any language) wrap to 2 lines rather than growing
+  // sideways into a neighbour — the line nearest the node stays anchored at
+  // labelY, and any extra line grows further AWAY from the node/row.
+  const LH = 12;
+  const wrapLabel = (text) => {
+    const idx = text.indexOf(' ');
+    return idx === -1 ? [text] : [text.slice(0, idx), text.slice(idx + 1)];
+  };
+  const labelTspans = (text, x, labelY, dir) => wrapLabel(text).map((line, i, lines) => {
+    const distFromNearest = dir === 'below' ? i : lines.length - 1 - i;
+    const y = dir === 'below' ? labelY + distFromNearest * LH : labelY - distFromNearest * LH;
+    return `<tspan x="${x}" y="${y}">${line}</tspan>`;
+  }).join('');
+
+  const row = (items, rowY, labelY, kind, linkFn, dir) => items.map((item, i) => {
+    const x = xAt(i);
+    const d = linkFn(x, rowY);
+    return `
+      <path class="ng-link ng-link--${kind}" d="${d}"></path>
+      ${nodeMotion(kind, i, d)}
+      <circle class="ng-node ng-node--${kind}" cx="${x}" cy="${rowY}" r="${NR}"></circle>
+      <text class="ng-icon ng-icon--${kind}" x="${x}" y="${rowY}" text-anchor="middle" dominant-baseline="central">${item.icon}</text>
+      <text class="ng-label" text-anchor="middle">${labelTspans(item.label, x, labelY, dir)}</text>`;
+  }).join('');
+
+  const inner = `
+      ${lockupGroup(W / 2, LOCKUP_Y, LOCKUP_H, 'ng-lockup')}
+      <text class="ng-col-title" x="${W / 2}" y="${TITLE1_Y}" text-anchor="middle">${s.graphPlatformsTitle}</text>
+      ${row(s.platforms, ROW1_Y, LABEL1_Y, 'platform', linkDown, 'above')}
+
+      <circle class="ng-hub-ring" cx="${HUB.x}" cy="${HUB.y}" r="${HUB.r}"></circle>
+      <circle class="ng-hub" cx="${HUB.x}" cy="${HUB.y}" r="${HUB.r}"></circle>
+      ${markGroup(HUB.x, HUB.y, HUB.r, 'ng-hub-mark')}
+      <text class="ng-hub-label" x="${HUB.x}" y="${HUB_LABEL_Y}" text-anchor="middle">${s.hubSub}</text>
+
+      <text class="ng-col-title" x="${W / 2}" y="${TITLE2_Y}" text-anchor="middle">${s.graphDataTitle}</text>
+      ${row(s.dataSources, ROW2_Y, LABEL2_Y, 'data', linkFromHub, 'below')}`;
+
+  return { W, H, inner };
+}
+
+let nodeGraphIsMobile = null;
+function renderNodeGraph(t) {
+  const s = t.solution;
+  nodeGraphIsMobile = window.matchMedia('(max-width: 767px)').matches;
+  const { W, H, inner } = nodeGraphIsMobile ? buildVerticalGraph(s) : buildHorizontalGraph(s);
+  document.getElementById('nodeGraph').innerHTML =
+    `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${s.graphPlatformsTitle} → ${s.hubLabel} → ${s.graphDataTitle}">${inner}</svg>`;
 }
 
 function renderDashboard(t) {
@@ -406,6 +493,13 @@ function setupAnimations() {
 
 document.querySelectorAll('.lang-switch button').forEach((btn) => {
   btn.addEventListener('click', () => { currentLang = btn.dataset.lang; applyI18n(); });
+});
+
+// Re-draw the node graph if the viewport crosses the mobile breakpoint
+// (e.g. rotating a phone, or resizing a desktop window) so it never shows
+// the wrong-orientation layout.
+window.matchMedia('(max-width: 767px)').addEventListener('change', (e) => {
+  if (e.matches !== nodeGraphIsMobile) renderNodeGraph(CONTENT[currentLang]);
 });
 
 const navToggle = document.getElementById('navToggle');
