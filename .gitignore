@@ -1,0 +1,7 @@
+# macOS / exFAT AppleDouble junk (this drive generates these constantly)
+._*
+.DS_Store
+
+# Editor/OS cruft
+*.swp
+Thumbs.db

@@ -1,0 +1,68 @@
+/* ==========================================================================
+   Voca Design System — Typography tokens
+
+   Font: Rubik — loaded from Google Fonts in <head> of every page
+   (see pages/landing.html). One family for Hebrew and English both.
+
+   Weights: 400 (regular) and 700 (bold) only. Never 100/300/500/600/900 —
+   that restraint is part of Voca's precise, uncluttered identity.
+   ========================================================================== */
+
+:root {
+  --font-family-base: 'Rubik', sans-serif;
+
+  --text-2xs:  0.625rem;   /* 10px — source citations only (see .source) */
+  --text-xs:   0.75rem;    /* 12px — labels, captions */
+  --text-sm:   0.875rem;   /* 14px — secondary body */
+  --text-base: 1rem;       /* 16px — primary body */
+  --text-lg:   1.25rem;    /* 20px — lead paragraph */
+  --text-xl:   1.5625rem;  /* 25px — H3 */
+  --text-2xl:  1.95rem;    /* 31px — H2 */
+  --text-3xl:  2.45rem;    /* 39px — H1 */
+  --text-4xl:  3.05rem;    /* 49px — Hero */
+
+  --leading-tight:  1.15;  /* headings */
+  --leading-normal: 1.55;  /* body */
+}
+
+/* Mobile — sizes shrink, proportions stay */
+@media (max-width: 767px) {
+  :root {
+    --text-3xl: 2rem;
+    --text-4xl: 2.4rem;
+    --text-2xl: 1.65rem;
+  }
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-weight: 400;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-family-base);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  margin: 0;
+}
+
+/* Bold reserved for headings + isolated emphasis points — never full paragraphs */
+strong, .text-emphasis {
+  font-weight: 700;
+}
+
+/* Source citations — always this class, never inline styling.
+   Deliberately much smaller and lighter than body copy so a citation can never
+   be mistaken for running text. Every statistic on the site carries one. */
+.source {
+  display: block;
+  font-size: var(--text-2xs);
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--data-axis-text);
+  font-weight: 400;
+}
+.source--on-inverse { color: color-mix(in srgb, var(--text-on-brand) 45%, transparent); }

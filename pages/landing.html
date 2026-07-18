@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voca — הדור הבא של שירות לקוחות</title>
+<meta name="description" content="Voca מתחברת לכל פלטפורמה שבה הלקוחות שלך מדברים ולכל נתוני העסק, ועונה בשמך - בקול שלך, תוך שניות, בכל שעה.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
+<link rel="stylesheet" href="../tokens/colors.css">
+<link rel="stylesheet" href="../tokens/typography.css">
+<link rel="stylesheet" href="../tokens/spacing.css">
+<link rel="stylesheet" href="../components/buttons.css">
+<link rel="stylesheet" href="../components/cards.css">
+<link rel="stylesheet" href="../components/nav.css">
+<link rel="stylesheet" href="../components/charts.css">
+<link rel="stylesheet" href="landing.css">
+</head>
+<body>
+<!-- Voca landing — built on voca-design-system tokens + charts -->
+<header class="site-header">
+  <nav class="site-nav">
+    <a class="site-nav-logo" href="#top">
+      <img src="../assets/logo/Voca_logo_DeepBluemdpi.svg" alt="Voca">
+    </a>
+    <button type="button" class="site-nav-toggle" id="navToggle" aria-label="menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="site-nav-links" id="navLinks">
+      <a href="#solution" data-i18n="nav.product"></a>
+      <a href="#capabilities" data-i18n="nav.capabilities"></a>
+      <a href="#pricing" data-i18n="nav.pricing"></a>
+    </div>
+    <div class="lang-switch">
+      <button type="button" data-lang="he">עב</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <button type="button" class="btn btn--primary" id="navCtaBtn" data-i18n="nav.cta"></button>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <span class="badge-pill" data-i18n="hero.badge"></span>
+        <h1><span data-i18n="hero.line1"></span><span data-i18n="hero.line2"></span></h1>
+        <p data-i18n="hero.sub"></p>
+        <span class="source" data-i18n="hero.subSource"></span>
+        <div class="actions">
+          <button type="button" class="btn btn--primary" id="openModalBtn" data-i18n="hero.primaryCta"></button>
+          <button type="button" class="btn btn--tertiary" data-i18n="hero.secondaryCta"></button>
+        </div>
+      </div>
+      <div class="hero-panel on-inverse" id="heroPanel"></div>
+    </div>
+  </section>
+
+  <!-- ===== Trust strip ===== -->
+  <section class="trust">
+    <div class="trust-inner">
+      <p class="trust-title" data-i18n="trust.title"></p>
+      <div class="trust-grid" id="trustGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===== Problem ===== -->
+  <section class="section reveal">
+    <div class="section-inner">
+      <div class="problem-top">
+        <div class="problem-copy">
+          <span class="kicker" data-i18n="problem.kicker"></span>
+          <h2 data-i18n="problem.title"></h2>
+          <p data-i18n="problem.body1"></p>
+          <p class="text-emphasis" data-i18n="problem.body2"></p>
+          <span class="source" data-i18n="problem.body2Source"></span>
+        </div>
+        <div class="gap-card" id="gapCard"></div>
+      </div>
+      <div class="problem-stats">
+        <p class="chart-caption" data-i18n="problem.statsTitle"></p>
+        <div class="problem-stats-grid" id="problemBars"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Solution ===== -->
+  <section class="section section--surface reveal" id="solution">
+    <div class="section-inner">
+      <div class="solution-top">
+        <div>
+          <span class="kicker" data-i18n="solution.kicker"></span>
+          <h2 data-i18n="solution.title"></h2>
+        </div>
+        <div class="solution-copy">
+          <p data-i18n="solution.body1"></p>
+          <p data-i18n="solution.body2"></p>
+          <p class="text-emphasis" data-i18n="solution.body3"></p>
+        </div>
+      </div>
+      <div class="nodegraph" id="nodeGraph"></div>
+    </div>
+  </section>
+
+  <!-- ===== Dashboard ===== -->
+  <section class="section reveal" id="dashboard">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="kicker" data-i18n="dashboard.kicker"></span>
+        <h2 data-i18n="dashboard.title"></h2>
+        <p data-i18n="dashboard.body"></p>
+      </div>
+
+      <div class="card dash-panel">
+        <div class="dash-head">
+          <span class="dash-head-title" data-i18n="dashboard.panelTitle"></span>
+          <span class="live"><span class="live-dot"></span><span data-i18n="dashboard.liveTag"></span></span>
+        </div>
+
+        <div class="dash-metrics" id="dashMetrics"></div>
+
+        <div class="dash-cols">
+          <div class="dash-feed">
+            <p class="card-label" data-i18n="dashboard.feedLabel"></p>
+            <div id="dashFeedItems"></div>
+          </div>
+          <div class="dash-queue">
+            <p class="card-label" data-i18n="dashboard.queueLabel"></p>
+            <div id="dashQueue"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Capabilities ===== -->
+  <section class="section section--surface reveal" id="capabilities">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="kicker" data-i18n="capabilities.kicker"></span>
+        <h2 data-i18n="capabilities.title"></h2>
+      </div>
+      <div class="feature-grid" id="featureCards"></div>
+    </div>
+  </section>
+
+  <!-- ===== Proof ===== -->
+  <section class="section reveal">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="kicker" data-i18n="proof.kicker"></span>
+        <h2 data-i18n="proof.title"></h2>
+        <p data-i18n="proof.body"></p>
+      </div>
+      <div class="proof-grid" id="proofGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===== Pricing ===== -->
+  <section class="section section--surface reveal" id="pricing">
+    <div class="section-inner pricing-grid">
+      <div class="pricing-copy">
+        <span class="kicker" data-i18n="pricing.kicker"></span>
+        <h2 data-i18n="pricing.title"></h2>
+        <p data-i18n="pricing.body"></p>
+        <p class="terms" data-i18n="pricing.terms"></p>
+      </div>
+      <div class="cost-card">
+        <p class="cost-card-title" data-i18n="pricing.costTitle"></p>
+        <div class="cost-chart" id="costBars"></div>
+        <p class="cost-ratio" data-i18n="pricing.ratioNote"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Final CTA ===== -->
+  <section class="final-cta">
+    <div class="final-cta-inner">
+      <h2 data-i18n="cta.title"></h2>
+      <p data-i18n="cta.sub"></p>
+      <div class="actions">
+        <button type="button" class="btn btn--on-accent" id="finalCtaBtn" data-i18n="cta.primaryCta"></button>
+        <button type="button" class="btn btn--on-accent-ghost" data-i18n="cta.secondaryCta"></button>
+      </div>
+      <p class="trust-line" data-i18n="cta.trust"></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <img src="../assets/logo/Voca_logo_DeepBluemdpi.svg" alt="Voca">
+  <span data-i18n="footer"></span>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button type="button" class="modal-close" id="modalCloseBtn" aria-label="close">✕</button>
+    <div class="step step-form">
+      <h3 data-i18n="modal.title"></h3>
+      <p data-i18n="modal.sub"></p>
+      <form id="modalForm">
+        <div class="field">
+          <label for="leadName" data-i18n="modal.nameLabel"></label>
+          <input class="input" id="leadName" type="text" required>
+        </div>
+        <div class="field">
+          <label for="leadPhone" data-i18n="modal.phoneLabel"></label>
+          <input class="input" id="leadPhone" type="tel" required>
+        </div>
+        <div class="field">
+          <label for="leadEmail" data-i18n="modal.emailLabel"></label>
+          <input class="input" id="leadEmail" type="email">
+        </div>
+        <button type="submit" class="btn btn--primary" data-i18n="modal.submit"></button>
+      </form>
+    </div>
+    <div class="step step-thanks hidden">
+      <h3 data-i18n="modal.thanksTitle"></h3>
+      <p data-i18n="modal.thanksBody"></p>
+    </div>
+  </div>
+</div>
+
+<script src="content.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

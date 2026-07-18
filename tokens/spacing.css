@@ -1,0 +1,40 @@
+/* ==========================================================================
+   Voca Design System — Spacing & layout tokens (8px base scale)
+   ========================================================================== */
+
+:root {
+  /* Primitives */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.5rem;   /* 24px */
+  --space-6: 2rem;     /* 32px */
+  --space-7: 3rem;     /* 48px */
+  --space-8:  4rem;    /* 64px */
+  --space-9:  5rem;    /* 80px */
+  --space-10: 6rem;    /* 96px */
+
+  /* Semantic */
+  --space-xs: var(--space-2);
+  --space-sm: var(--space-3);
+  --space-md: var(--space-5);
+  --space-lg: var(--space-7);
+  --space-xl: var(--space-9);
+  --space-2xl: var(--space-10);
+
+  --container-max: 1200px;
+  --radius-default: 12px; /* soft rounded corners — part of the "young", non-aggressive identity */
+  --radius-sm: 8px;       /* chips, inputs, small controls */
+  --radius-lg: 20px;      /* large feature/dashboard panels */
+}
+
+/* Breakpoints: Mobile ≤767px · Tablet 768–991px · Desktop ≥992px */
+@media (max-width: 767px) {
+  :root {
+    --space-md:  var(--space-4);
+    --space-lg:  var(--space-5);
+    --space-xl:  var(--space-6);
+    --space-2xl: var(--space-7);
+  }
+}

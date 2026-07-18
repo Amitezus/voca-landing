@@ -1,0 +1,114 @@
+/* ==========================================================================
+   Voca Design System — Color tokens
+   60% Neutral/Background · 30% Navy (brand/structure) · 10% Coral (accent/energy)
+
+   Iron rule: navy and coral never carry equal visual weight in one section.
+   If navy dominates a section, coral appears only as isolated CTA points
+   (button, icon, single highlight) — never a 50/50 split.
+
+   Primitives (below) are the only place raw hex values may live.
+   Every component/page file must reference semantic tokens only.
+   ========================================================================== */
+
+:root {
+  /* ---- Neutral primitives (base #E6EAF0) ---- */
+  --neutral-0:   #FFFFFF;
+  --neutral-50:  #F7F8FA;
+  --neutral-100: #E6EAF0;
+  --neutral-200: #D3D9E1;
+  --neutral-300: #B7C0CC;
+  --neutral-400: #93A0B0;
+  --neutral-500: #707E90;
+  --neutral-600: #566171;
+  --neutral-700: #3F4854;
+  --neutral-800: #292F38;
+  --neutral-900: #14171C;
+
+  /* ---- Navy primitives (base #004A7D) ---- */
+  --navy-50:  #E6EEF4;
+  --navy-100: #C2D6E5;
+  --navy-300: #4D80A8;
+  --navy-500: #004A7D;
+  --navy-700: #003357;
+  --navy-900: #001C30;
+
+  /* ---- Coral primitives (base #FF5E5E, light #FFA8A8) ---- */
+  --coral-50:  #FFEDED;
+  --coral-100: #FFD6D6;
+  --coral-300: #FFA8A8;
+  --coral-500: #FF5E5E;
+  --coral-700: #E23A3A;
+  --coral-900: #A31F1F;
+
+  /* ---- Success primitives ---- */
+  --success-100: #DFF5E3;
+  --success-500: #2FA84B;
+  --success-700: #1B6B2F;
+
+  /* ---- Warning primitives ---- */
+  --warning-100: #FFF3D6;
+  --warning-500: #E0A519;
+  --warning-700: #8F660D;
+
+  /* ================= Semantic tokens ================= */
+
+  /* Backgrounds */
+  --bg-page:            var(--neutral-50);
+  --bg-surface:          var(--neutral-0);
+  --bg-inverse:          var(--navy-900);
+  --bg-accent:           var(--coral-500);
+  --bg-accent-subtle:    var(--coral-50);
+
+  /* Text */
+  --text-primary:        var(--neutral-900);
+  --text-secondary:      var(--neutral-600);
+  --text-brand:          var(--navy-500);
+  --text-on-accent:      var(--neutral-0);
+  --text-on-brand:       var(--neutral-0);
+
+  /* Borders */
+  --border-default:      var(--neutral-200);
+  --border-strong:       var(--neutral-300);
+  --border-focus:        var(--coral-500);
+
+  /* Buttons */
+  --btn-primary-bg:       var(--coral-500);
+  --btn-primary-bg-hover: var(--coral-700);
+  --btn-primary-text:     var(--neutral-0);
+
+  --btn-secondary-bg:       var(--navy-500);
+  --btn-secondary-bg-hover: var(--navy-700);
+  --btn-secondary-text:     var(--neutral-0);
+
+  --btn-tertiary-border: var(--navy-500);
+  --btn-tertiary-text:   var(--navy-500);
+
+  /* Links */
+  --link-color:        var(--navy-500);
+  --link-color-hover:  var(--coral-500);
+
+  /* System states */
+  --state-success-bg:   var(--success-100);
+  --state-success-text: var(--success-700);
+  --state-warning-bg:   var(--warning-100);
+  --state-warning-text: var(--warning-700);
+  --state-danger-bg:    var(--coral-50);
+  --state-danger-text:  var(--coral-900);
+
+  /* ---- Data-viz ----
+     Charts on this page follow the dataviz method: coral is the primary data
+     hue, navy the comparison hue (CVD-safe pair, ΔE 56), neutral tracks behind.
+     Every data mark is direct-labeled — never color alone. */
+  --data-primary:       var(--coral-500);   /* main magnitude/series-1 */
+  --data-primary-soft:  var(--coral-300);   /* secondary shade of primary */
+  --data-secondary:     var(--navy-500);    /* comparison / series-2 */
+  --data-positive:      var(--success-500); /* good-state marks */
+  --data-track:         var(--neutral-200); /* empty part of bars/gauges on light */
+  --data-grid:          var(--neutral-200); /* gridlines / axis rules */
+  --data-axis-text:     var(--neutral-500); /* axis + tick labels */
+
+  /* On the dark (navy-900) dashboard/inverse surfaces */
+  --data-track-on-inverse: color-mix(in srgb, var(--neutral-0) 12%, transparent);
+  --data-grid-on-inverse:  color-mix(in srgb, var(--neutral-0) 12%, transparent);
+  --data-axis-on-inverse:  color-mix(in srgb, var(--neutral-0) 55%, transparent);
+}
