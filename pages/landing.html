@@ -202,19 +202,23 @@
       <h3 data-i18n="modal.title"></h3>
       <p data-i18n="modal.sub"></p>
       <form id="modalForm">
+        <input type="hidden" name="access_key" value="5730b29d-b45b-4fca-b890-896de8f36636">
+        <input type="hidden" name="subject" value="פנייה חדשה מאתר Voca">
+        <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off">
         <div class="field">
           <label for="leadName" data-i18n="modal.nameLabel"></label>
-          <input class="input" id="leadName" type="text" required>
+          <input class="input" id="leadName" name="name" type="text" required>
         </div>
         <div class="field">
           <label for="leadPhone" data-i18n="modal.phoneLabel"></label>
-          <input class="input" id="leadPhone" type="tel" required>
+          <input class="input" id="leadPhone" name="phone" type="tel" required>
         </div>
         <div class="field">
           <label for="leadEmail" data-i18n="modal.emailLabel"></label>
-          <input class="input" id="leadEmail" type="email">
+          <input class="input" id="leadEmail" name="email" type="email">
         </div>
-        <button type="submit" class="btn btn--primary" data-i18n="modal.submit"></button>
+        <button type="submit" class="btn btn--primary" id="modalSubmitBtn" data-i18n="modal.submit"></button>
+        <p class="source" id="modalError" style="color:var(--coral-700);margin-top:var(--space-2);display:none" data-i18n="modal.errorBody"></p>
       </form>
     </div>
     <div class="step step-thanks hidden">

@@ -533,10 +533,35 @@ document.getElementById('navCtaBtn').addEventListener('click', openModal);
 document.getElementById('finalCtaBtn').addEventListener('click', openModal);
 document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-modalForm.addEventListener('submit', (e) => {
+
+const modalSubmitBtn = document.getElementById('modalSubmitBtn');
+const modalError = document.getElementById('modalError');
+
+modalForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  stepForm.classList.add('hidden');
-  stepThanks.classList.remove('hidden');
+  if (modalForm.querySelector('[name="botcheck"]').checked) return; // honeypot: silently drop bots
+
+  const t = CONTENT[currentLang].modal;
+  modalError.style.display = 'none';
+  modalSubmitBtn.disabled = true;
+  modalSubmitBtn.textContent = t.sending;
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      body: new FormData(modalForm),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.message || 'send failed');
+    stepForm.classList.add('hidden');
+    stepThanks.classList.remove('hidden');
+  } catch (err) {
+    modalError.style.display = 'block';
+  } finally {
+    modalSubmitBtn.disabled = false;
+    modalSubmitBtn.textContent = t.submit;
+  }
 });
 
 applyI18n();
