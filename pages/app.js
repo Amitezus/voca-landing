@@ -262,12 +262,12 @@ function buildVerticalGraph(s) {
   const ROW1_Y = LABEL1_Y + 24;                // platform node centres
 
   const HUB = { x: W / 2, y: ROW1_Y + 122, r: 40 };
+  const HUB_LABEL_X = HUB.x - HUB.r - 14;      // "context engine" sits beside the hub, vertically centred on it
 
-  const HUB_LABEL_Y = HUB.y + HUB.r + 22;
-  const TITLE2_Y = HUB_LABEL_Y + 30;           // "your business data"
-  const ROW2_Y = TITLE2_Y + 38;                // data-source node centres
+  const ROW2_Y = HUB.y + HUB.r + 75;           // data-source node centres
   const LABEL2_Y = ROW2_Y + NR + 16;           // nearest-to-node label line, below row 2 (outward from hub)
-  const H = LABEL2_Y + 20 + 12;                 // padding + room for a wrapped second label line
+  const TITLE2_Y = LABEL2_Y + 30;              // "your business data" — now a caption BELOW the whole list
+  const H = TITLE2_Y + 20;                     // bottom padding
 
   const bend = 55;
   // Converging down: from a top-row node into the hub.
@@ -314,10 +314,10 @@ function buildVerticalGraph(s) {
       <circle class="ng-hub-ring" cx="${HUB.x}" cy="${HUB.y}" r="${HUB.r}"></circle>
       <circle class="ng-hub" cx="${HUB.x}" cy="${HUB.y}" r="${HUB.r}"></circle>
       ${markGroup(HUB.x, HUB.y, HUB.r, 'ng-hub-mark')}
-      <text class="ng-hub-label" x="${HUB.x}" y="${HUB_LABEL_Y}" text-anchor="middle">${s.hubSub}</text>
+      <text class="ng-hub-label" x="${HUB_LABEL_X}" y="${HUB.y}" text-anchor="end" dominant-baseline="central">${s.hubSub}</text>
 
-      <text class="ng-col-title" x="${W / 2}" y="${TITLE2_Y}" text-anchor="middle">${s.graphDataTitle}</text>
-      ${row(s.dataSources, ROW2_Y, LABEL2_Y, 'data', linkFromHub, 'below')}`;
+      ${row(s.dataSources, ROW2_Y, LABEL2_Y, 'data', linkFromHub, 'below')}
+      <text class="ng-col-title" x="${W / 2}" y="${TITLE2_Y}" text-anchor="middle">${s.graphDataTitle}</text>`;
 
   return { W, H, inner };
 }
