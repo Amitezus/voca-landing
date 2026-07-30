@@ -114,22 +114,41 @@
         <p data-i18n="dashboard.body"></p>
       </div>
 
-      <div class="card dash-panel">
-        <div class="dash-head">
-          <span class="dash-head-title" data-i18n="dashboard.panelTitle"></span>
-          <span class="live"><span class="live-dot"></span><span data-i18n="dashboard.liveTag"></span></span>
-        </div>
-
-        <div class="dash-metrics" id="dashMetrics"></div>
-
-        <div class="dash-cols">
-          <div class="dash-feed">
-            <p class="card-label" data-i18n="dashboard.feedLabel"></p>
-            <div id="dashFeedItems"></div>
+      <div class="dash-stage" id="dashStage">
+        <div class="dash-window" id="dashWindow">
+          <div class="dash-chrome">
+            <span class="dash-chrome-dots"><span></span><span></span><span></span></span>
+            <span class="dash-chrome-url">app.voca-agnt.com/command</span>
           </div>
-          <div class="dash-queue">
-            <p class="card-label" data-i18n="dashboard.queueLabel"></p>
-            <div id="dashQueue"></div>
+          <div class="dash-body">
+            <aside class="dash-rail" aria-hidden="true">
+              <span class="dash-rail-icon is-active"><span class="material-symbols-outlined">dashboard</span></span>
+              <span class="dash-rail-icon"><span class="material-symbols-outlined">forum</span></span>
+              <span class="dash-rail-icon"><span class="material-symbols-outlined">reviews</span></span>
+              <span class="dash-rail-icon"><span class="material-symbols-outlined">call</span></span>
+              <span class="dash-rail-icon"><span class="material-symbols-outlined">mood</span></span>
+              <span class="dash-rail-icon"><span class="material-symbols-outlined">storefront</span></span>
+              <span class="dash-rail-icon"><span class="material-symbols-outlined">policy</span></span>
+            </aside>
+            <div class="dash-panel">
+              <div class="dash-head">
+                <span class="dash-head-title" data-i18n="dashboard.panelTitle"></span>
+                <span class="live"><span class="live-dot"></span><span data-i18n="dashboard.liveTag"></span></span>
+              </div>
+
+              <div class="dash-metrics" id="dashMetrics"></div>
+
+              <div class="dash-cols">
+                <div class="dash-feed">
+                  <p class="card-label" data-i18n="dashboard.feedLabel"></p>
+                  <div id="dashFeedItems"></div>
+                </div>
+                <div class="dash-queue">
+                  <p class="card-label" data-i18n="dashboard.queueLabel"></p>
+                  <div id="dashQueue"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

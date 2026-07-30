@@ -211,8 +211,30 @@ button { font-family: inherit; }
 
 /* ============================ Dashboard ============================
    KPIs + live feed + approval queue only. (The chart row was removed —
-   the hero already carries the gauge/trend story.) */
-.dash-panel { overflow: hidden; padding: 0; }
+   the hero already carries the gauge/trend story.) Presented as a
+   floating "app window" (chrome bar + decorative nav rail, echoing the
+   real product shell) that tilts toward the cursor in 3D — see the
+   dash-stage tilt handler in app.js. */
+.dash-stage { perspective: 1800px; padding: var(--space-6) 0; }
+.dash-window {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 30px 70px -24px color-mix(in srgb, var(--navy-900) 45%, transparent);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.dash-chrome { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-5); background: var(--bg-inverse); }
+.dash-chrome-dots { display: inline-flex; gap: 6px; }
+.dash-chrome-dots span { width: 9px; height: 9px; border-radius: 50%; background: color-mix(in srgb, var(--text-on-brand) 25%, transparent); display: block; }
+.dash-chrome-url { font-size: var(--text-xs); color: color-mix(in srgb, var(--text-on-brand) 55%, transparent); font-family: monospace; }
+.dash-body { display: flex; }
+.dash-rail { flex: 0 0 auto; width: 56px; background: var(--bg-inverse); display: flex; flex-direction: column; align-items: center; gap: var(--space-2); padding: var(--space-4) 0; }
+.dash-rail-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: color-mix(in srgb, var(--text-on-brand) 55%, transparent); }
+.dash-rail-icon .material-symbols-outlined { font-size: 20px; }
+.dash-rail-icon.is-active { background: var(--bg-accent); color: var(--text-on-accent); }
+.dash-panel { flex: 1 1 auto; min-width: 0; overflow: hidden; padding: 0; }
 .dash-head { display: flex; align-items: center; justify-content: space-between; padding: var(--space-4) var(--space-5); background: var(--bg-page); border-bottom: 1px solid var(--border-default); }
 .dash-head-title { font-weight: 700; font-size: var(--text-sm); }
 .dash-head .live { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); color: var(--text-secondary); }
@@ -232,6 +254,16 @@ button { font-family: inherit; }
 .dash-reply .reply-label { font-size: var(--text-xs); font-weight: 700; color: var(--coral-700); white-space: nowrap; }
 .dash-reply p { margin: 0; font-size: var(--text-sm); color: var(--text-secondary); }
 @media (max-width: 820px) { .dash-cols { grid-template-columns: 1fr; } .dash-feed { border-inline-end: 0; border-bottom: 1px solid var(--border-default); } }
+
+/* Mobile: a peek, not the full desktop screen — drop the rail + tilt + queue column */
+@media (max-width: 767px) {
+  .dash-stage { perspective: none; padding: var(--space-4) 0; }
+  .dash-window { transform: none !important; box-shadow: 0 16px 32px -16px color-mix(in srgb, var(--navy-900) 35%, transparent); }
+  .dash-rail { display: none; }
+  .dash-chrome-url { display: none; }
+  .dash-queue { display: none; }
+  .dash-feed { border-inline-end: 0; }
+}
 
 /* ============================ Capabilities ============================ */
 .feature-grid {

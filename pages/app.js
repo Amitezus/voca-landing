@@ -564,4 +564,40 @@ modalForm.addEventListener('submit', async (e) => {
   }
 });
 
+/* ---------- Dashboard 3D tilt ----------
+   The dash "app window" floats in perspective and tilts toward the
+   cursor, like a physical screen you're looking at from an angle.
+   Skipped on touch devices (no meaningful hover) and reduced-motion. */
+(function initDashTilt() {
+  const stage = document.getElementById('dashStage');
+  const win = document.getElementById('dashWindow');
+  if (!stage || !win) return;
+  if (reduceMotion || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  const MAX_Y = 9;  // rotateY range (left-right, deg)
+  const MAX_X = 6;  // rotateX range (up-down, deg)
+  let targetX = 0, targetY = 0, curX = 0, curY = 0, raf = null;
+
+  function render() {
+    curX += (targetX - curX) * 0.12;
+    curY += (targetY - curY) * 0.12;
+    win.style.transform = `rotateX(${curY.toFixed(2)}deg) rotateY(${curX.toFixed(2)}deg)`;
+    win.style.boxShadow = `${(-curX * 2).toFixed(1)}px ${(24 + curY * 2).toFixed(1)}px 70px -20px color-mix(in srgb, var(--navy-900) 45%, transparent)`;
+    if (Math.abs(targetX - curX) > 0.02 || Math.abs(targetY - curY) > 0.02) {
+      raf = requestAnimationFrame(render);
+    } else {
+      raf = null;
+    }
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(render); }
+
+  stage.addEventListener('mousemove', (e) => {
+    const r = stage.getBoundingClientRect();
+    targetX = ((e.clientX - r.left) / r.width - 0.5) * (MAX_Y * 2);
+    targetY = -((e.clientY - r.top) / r.height - 0.5) * (MAX_X * 2);
+    kick();
+  });
+  stage.addEventListener('mouseleave', () => { targetX = 0; targetY = 0; kick(); });
+})();
+
 applyI18n();
