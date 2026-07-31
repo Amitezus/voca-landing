@@ -318,7 +318,7 @@ button { font-family: inherit; }
 
 /* ============================ Footer ============================ */
 .site-footer { padding: var(--space-6) clamp(var(--space-5), 5vw, var(--space-8)); display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; border-top: 1px solid var(--border-default); max-width: var(--container-max); margin: 0 auto; }
-.site-footer img { height: 21px; opacity: 0.7; } /* +15% over the original 18px */
+.site-footer img { height: 23px; opacity: 1; } /* +10% over 21px, full opacity for stronger contrast */
 .site-footer span { font-size: var(--text-sm); color: var(--text-secondary); margin-inline-start: auto; }
 
 /* ============================ Modal ============================ */
